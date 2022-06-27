@@ -7,24 +7,44 @@ using System.Threading;
 
 namespace MyMovies.CMD
 {
+	/// <summary>
+	/// Интерфейс приложения.
+	/// </summary>
 	class Program
 	{
+		/// <summary>
+		/// Контроллер команд.
+		/// </summary>
 		private static CommandController _commandController;
+
+		/// <summary>
+		/// Контроллер каталогов.
+		/// </summary>
 		private static CatalogController _catalogController;
+
+		/// <summary>
+		/// Контроллер таблицы.
+		/// </summary>
 		private static DataTableController _dataTableController;
 
+		/// <summary>
+		/// Местоположение.
+		/// </summary>
 		private static Location _location;
 
+		/// <summary>
+		/// Список команд.
+		/// </summary>
 		private static readonly Dictionary<Location, List<string>> _commands = new Dictionary<Location, List<string>>();
 
 		static void Main(string[] args)
 		{
-			Console.WriteLine("Вас приветствует приложение MyMovies");
+			Console.WriteLine("Вас приветствует приложение MyMovies!");
 
-			Console.WriteLine("Введите имя пользователя");
+			Console.WriteLine("Введите имя пользователя:");
 			var name = Console.ReadLine();
 
-			Console.WriteLine("Введите пароль пользователя");
+			Console.WriteLine("Введите пароль пользователя:");
 			var password = Console.ReadLine();
 
 			var userController = new UserController(name, password);
@@ -33,7 +53,7 @@ namespace MyMovies.CMD
 
 			_commands.Add(Location.Catalogs, new List<string>
 			{
-				"A - СОЗДАТЬ каталог",
+				"A - ДОБАВИТЬ каталог",
 				"O - ОТКРЫТЬ каталог",
 				"C - ИЗМЕНИТЬ каталог",
 				"D - УДАЛИТЬ каталог",
@@ -44,7 +64,7 @@ namespace MyMovies.CMD
 
 			_commands.Add(Location.Movies, new List<string>
 			{
-				"A - СОЗДАТЬ фильм",
+				"A - ДОБАВИТЬ фильм",
 				"O - ОТКРЫТЬ фильм",
 				"C - ИЗМЕНИТЬ фильм",
 				"D - УДАЛИТЬ фильм",
@@ -66,7 +86,7 @@ namespace MyMovies.CMD
 				}
 			}
 
-			ShowMainMenu(userController);
+			ShowMainMenu(userController.CurrentUser.Name);
 
 			while (true)
 			{
@@ -89,7 +109,7 @@ namespace MyMovies.CMD
 						break;
 
 					case ConsoleKey.C:
-						_commandController.Update();
+						_commandController.Change();
 						break;
 
 					case ConsoleKey.D:
@@ -98,7 +118,7 @@ namespace MyMovies.CMD
 
 					case ConsoleKey.S:
 						Console.WriteLine();
-						Console.Write("Введите '1', чтобы сортировать по имени, '2' - сортировать по дате: ");     
+						Console.Write("Введите '1', чтобы сортировать по названию, '2' - сортировать по дате: ");     
 
 						switch (Console.ReadLine())
 						{
@@ -148,21 +168,29 @@ namespace MyMovies.CMD
 			}
 		}
 
-		private static void ShowMainMenu(UserController userController)
+		/// <summary>
+		/// Показать главное меню.
+		/// </summary>
+		/// <param name="userName"> Имя пользователя. </param>
+		private static void ShowMainMenu(string userName)
 		{
 			_location = Location.Catalogs;
 			UpdateCommands();
 
-			ShowMessage($"Добро пожаловать, {userController.CurrentUser}!", true);		
+			ShowMessage($"Добро пожаловать, {userName}!", true);		
 		}
 
-		private static void ShowList<T>(List<T> list)
+		/// <summary>
+		/// Показать пронумерованный список элементов.
+		/// </summary>
+		/// <param name="items"> Список элементов. </param>
+		private static void ShowNumberedList<T>(List<T> items)
 		{
-			if (list.Count > 0)
+			if (items.Count > 0)
 			{
-				for (int i = 1; i <= list.Count; i++)
+				for (int i = 1; i <= items.Count; i++)
 				{
-					Console.WriteLine($"{i}. { list[i - 1]}");
+					Console.WriteLine($"{i}. { items[i - 1]}");
 				}				
 			}
 			else
@@ -171,6 +199,50 @@ namespace MyMovies.CMD
 			}
 		}
 
+		/// <summary>
+		/// Показать список элементов.
+		/// </summary>
+		/// <param name="items"> Список элементов. </param>
+		private static void ShowList<T>(List<T> items)
+		{
+			if (items.Count > 0)
+			{
+				for (int i = 1; i <= items.Count; i++)
+				{
+					Console.WriteLine($"{ items[i - 1]}");
+				}
+			}
+			else
+			{
+				Console.WriteLine("Пусто...");
+			}
+		}
+
+		/// <summary>
+		/// Показать информацию.
+		/// </summary>
+		/// <param name="list"> Список информации. </param>
+		/// <param name="name"> Название информации. </param>
+		private static void ShowInformation<T>(List<T> list, string name)
+		{
+			Console.Write(name);
+
+			for (int i = 0; i < list.Count; i++)
+			{
+				if (i < list.Count - 1)
+				{
+					Console.Write($"{list[i]}, ");
+				}
+				else
+				{
+					Console.WriteLine($"{list[i]}");
+				}
+			}
+		}
+
+		/// <summary>
+		/// Показать команды.
+		/// </summary>
 		private static void ShowCommands()
 		{
 			Console.ForegroundColor = ConsoleColor.Yellow;
@@ -188,6 +260,11 @@ namespace MyMovies.CMD
 			Console.ResetColor();			
 		}
 
+		/// <summary>
+		/// Показать сообщение.
+		/// </summary>
+		/// <param name="message"> Текст сообщения. </param>
+		/// <param name="success"> Отметка об успешном выполнении действия, о котором оповещает данное сообщение. </param>
 		private static void ShowMessage(string message, bool success)
 		{
 			if (success)
@@ -207,23 +284,11 @@ namespace MyMovies.CMD
 			GoToCurrentLocation();
 		}
 
-		private static void ShowInformation<T>(List<T> list, string name)
-		{
-			Console.Write(name);
-
-			for (int i = 0; i < list.Count; i++)
-			{
-				if (i < list.Count - 1)
-				{
-					Console.Write($"{list[i]}, ");
-				}
-				else
-				{
-					Console.WriteLine($"{list[i]}");
-				}
-			}
-		}
-
+		/// <summary>
+		/// Размножить символ.
+		/// </summary>
+		/// <param name="symbol"> Символ. </param>
+		/// <param name="length"> Длина. </param>
 		private static void MultiplySymbol(char symbol, int length)
 		{
 			for (int i = 0; i < length; i++)
@@ -232,6 +297,9 @@ namespace MyMovies.CMD
 			}
 		}
 
+		/// <summary>
+		/// Начертить таблицу фильмов.
+		/// </summary>
 		private static void DrawMoviesTable()
 		{
 			if (_catalogController.CurrentCatalog.Movies.Count > 0)
@@ -268,6 +336,12 @@ namespace MyMovies.CMD
 			}			
 		}
 
+		/// <summary>
+		/// Начертить названия столбцов в таблице.
+		/// </summary>
+		/// <param name="columns"> Названия столбцов. </param>
+		/// <param name="columnsLength"> Длина столбцов. </param>
+		/// <param name="tableWidth"> Ширина таблицы. </param>
 		private static void DrawColumns(string[] columns, int[] columnsLength, int tableWidth)
 		{
 			MultiplySymbol('-', tableWidth);
@@ -279,6 +353,11 @@ namespace MyMovies.CMD
 			Console.WriteLine();
 		}
 
+		/// <summary>
+		/// Начертить ячейки в таблице.
+		/// </summary>
+		/// <param name="cells"> Ячейки. </param>
+		/// <param name="columnsLength"> Длина столбцов. </param>
 		private static void DrawCells(string[] cells, int[] columnsLength)
 		{
 			int countSpace;
@@ -297,6 +376,9 @@ namespace MyMovies.CMD
 			Console.WriteLine("|");
 		}
 
+		/// <summary>
+		/// Добавить каталог.
+		/// </summary>
 		private static void AddCatalog()
 		{			
 			Console.Write("Введите название для нового каталога: ");
@@ -304,6 +386,9 @@ namespace MyMovies.CMD
 			_catalogController.AddCatalog(newCatalogName);
 		}
 
+		/// <summary>
+		/// Открыть каталог.
+		/// </summary>
 		private static void OpenCatalog()
 		{
 			int index = ParseIntCommand("Введите номер каталога, который хотите открыть: ", _catalogController.Catalogs.Count);
@@ -316,7 +401,10 @@ namespace MyMovies.CMD
 			GoToCurrentLocation();				
 		}
 
-		private static void UpdateCatalog()
+		/// <summary>
+		/// Изменить каталог.
+		/// </summary>
+		private static void ChangeCatalog()
 		{
 			int index = ParseIntCommand("Введите номер каталога, который хотите переименовать: ", _catalogController.Catalogs.Count);
 			if (index == 0) return;
@@ -326,6 +414,9 @@ namespace MyMovies.CMD
 			_catalogController.ChangeCatalog(index - 1, newCatalogName);
 		}
 
+		/// <summary>
+		/// Удалить каталог.
+		/// </summary>
 		private static void RemoveCatalog()
 		{
 			int index = ParseIntCommand("Введите номер каталога, который хотите удалить: ", _catalogController.Catalogs.Count);
@@ -334,28 +425,40 @@ namespace MyMovies.CMD
 			_catalogController.RemoveCatalog(index - 1);
 		}
 
+		/// <summary>
+		/// Сортировать каталоги по названию.
+		/// </summary>
 		private static void OrderByNameCatalogs()
 		{
 			_catalogController.OrderByNameCatalogs();
 
-			ShowList(_catalogController.Catalogs);
+			ShowNumberedList(_catalogController.Catalogs);
 		}
 
+		/// <summary>
+		/// Сортировать каталоги по дате добавления.
+		/// </summary>
 		private static void OrderByDateCatalogs()
 		{
 			_catalogController.OrderByDateCatalogs();
 
-			ShowList(_catalogController.Catalogs);
+			ShowNumberedList(_catalogController.Catalogs);
 		}
 
+		/// <summary>
+		/// Поиск каталогов.
+		/// </summary>
 		private static void FindCatalogs()
 		{
 			Console.WriteLine("Введите название каталога, который нужно найти: ");
 			var catalogs = _catalogController.FindCatalogs(Console.ReadLine());
 
-			ShowList(catalogs);
+			ShowNumberedList(catalogs);
 		}
 
+		/// <summary>
+		/// Добавить фильм.
+		/// </summary>
 		private static void AddMovie()
 		{
 			Console.Write("Введите название фильма: ");
@@ -373,7 +476,7 @@ namespace MyMovies.CMD
 			Console.Write("Введите рейтинг (разделительный знак - запятая): ");
 			double rating = ParseDouble("рейтинг");
 
-			ShowList(_catalogController.Genres);
+			ShowNumberedList(_catalogController.Genres);
 			Console.Write("Введите жанры через запятую: ");			
 			var genres = new List<Genre>();
 			genres.AddRange(ParseGenres());
@@ -385,6 +488,9 @@ namespace MyMovies.CMD
 			_catalogController.AddMovie(movie);
 		}
 
+		/// <summary>
+		/// Открыть фильм.
+		/// </summary>
 		private static void OpenMovie()
 		{
 			int index = ParseIntCommand("Введите номер фильма, который хотите открыть: ", _catalogController.CurrentCatalog.Movies.Count);
@@ -405,10 +511,15 @@ namespace MyMovies.CMD
 			GoToCurrentLocation();
 		}
 
-		private static void UpdateMovie()
+		/// <summary>
+		/// Изменить фильм.
+		/// </summary>
+		private static void ChangeMovie()
 		{
 			int index = ParseIntCommand("Введите номер фильма, который хотите изменить: ", _catalogController.CurrentCatalog.Movies.Count);
 			if (index == 0) return;
+
+			List<Genre> gg = _catalogController.CurrentCatalog.Movies[0].Genres;
 
 			_catalogController.CurrentMovie = _catalogController.CurrentCatalog.Movies[index - 1];
 
@@ -440,28 +551,28 @@ namespace MyMovies.CMD
 						return;
 
 					case 1:
-						Console.Write($"Введите название {_catalogController.CurrentMovie.Name}: ");
+						Console.Write($"Введите название: ");
 						name = Console.ReadLine();
 						break;
 
 					case 2:
-						Console.Write($"Введите оригинальное название {_catalogController.CurrentMovie.OriginalName}: ");
+						Console.Write($"Введите оригинальное название: ");
 						originalName = Console.ReadLine();
 						break;
 
 					case 3:
-						Console.Write($"Введите год {_catalogController.CurrentMovie.Year}: ");
-						year = ParseInt(Console.ReadLine());
+						Console.Write($"Введите год: ");
+						year = ParseInt("год");
 						break;
 
 					case 4:
-						Console.Write($"Введите режиссёра {_catalogController.CurrentMovie.Director}: ");
+						Console.Write($"Введите режиссёра: ");
 						director = Console.ReadLine();
 						break;
 
 					case 5:
-						Console.Write($"Введите рейтинг {_catalogController.CurrentMovie.Rating}: ");
-						rating = ParseInt(Console.ReadLine());
+						Console.Write($"Введите рейтинг: ");
+						rating = ParseDouble("рейтинг");
 						break;
 
 					case 6:
@@ -482,14 +593,26 @@ namespace MyMovies.CMD
 						break;
 				}
 
-				Console.Write("Введите '1', чтобы сохранить изменения, или любую другую клавишу, чтобы продолжить переименование: ");
-				if (ParseInt("Фильм") == 1) break;
-			}
+				while (true)
+				{
+					Console.Write("Сохранить? Введите 'да', чтобы сохранить изменения, 'нет' - продолжить редактирование: ");
+					string result = Console.ReadLine();
 
-			var movie = new Movie(name, originalName, year, director, rating, genres, watched, additionDate);
-			_catalogController.ChangeMovie(index - 1, movie);
+					if (result.Equals("да", StringComparison.CurrentCultureIgnoreCase))
+					{
+						var movie = new Movie(name, originalName, year, director, rating, genres, watched, additionDate);
+						_catalogController.ChangeMovie(index - 1, movie);
+
+						return;
+					}
+					else if (result.Equals("нет", StringComparison.CurrentCultureIgnoreCase)) break;
+				}
+			}			
 		}
 
+		/// <summary>
+		/// Удалить фильм.
+		/// </summary>
 		private static void RemoveMovie()
 		{
 			int index = ParseIntCommand("Введите номер фильма, который хотите удалить: ", _catalogController.CurrentCatalog.Movies.Count);
@@ -498,28 +621,40 @@ namespace MyMovies.CMD
 			_catalogController.RemoveMovie(index - 1);
 		}
 
+		/// <summary>
+		/// Сортировать фильмы по названию.
+		/// </summary>
 		private static void OrderByNameMovies()
 		{
 			_catalogController.OrderByNameMovies();
 
-			ShowList(_catalogController.CurrentCatalog.Movies);
+			ShowNumberedList(_catalogController.CurrentCatalog.Movies);
 		}
 
+		/// <summary>
+		/// Сортировать фильмы по дате добавления.
+		/// </summary>
 		private static void OrderByDateMovies()
 		{
 			_catalogController.OrderByDateMovies();
 
-			ShowList(_catalogController.CurrentCatalog.Movies);
+			ShowNumberedList(_catalogController.CurrentCatalog.Movies);
 		}
 
+		/// <summary>
+		/// Поиск фильмов по названию.
+		/// </summary>
 		private static void FindMovies()
 		{
 			Console.Write("Введите название фильма, который нужно найти: ");
 			var movies = _catalogController.FindMovies(Console.ReadLine());
 
-			ShowList(movies);
+			ShowNumberedList(movies);
 		}
 
+		/// <summary>
+		/// Фильтровать фильмы по жанру.
+		/// </summary>
 		public static void FiltByGenres()
 		{
 			ShowList(_catalogController.Genres);
@@ -533,9 +668,14 @@ namespace MyMovies.CMD
 			ShowCommands();
 
 			Console.WriteLine("Фильмы по Вашему запросу:");
-			ShowList(movies);
+			ShowNumberedList(movies);
 		}
 
+		/// <summary>
+		/// Перевести строку в целое число.
+		/// </summary>
+		/// <param name="name"> Название элемента. </param>
+		/// <returns> Результат перевода. </returns>
 		private static int ParseInt(string name)
 		{
 			if (int.TryParse(Console.ReadLine(), out int result))
@@ -544,12 +684,17 @@ namespace MyMovies.CMD
 			}
 			else
 			{
-				Console.WriteLine($"{name} не найден");
+				Console.WriteLine($"{name} не найден.");
 				GoToCurrentLocation();
 				return 0;
 			}
 		}
 
+		/// <summary>
+		/// Перевести строку в вещественное число.
+		/// </summary>
+		/// <param name="name"> Название элемента. </param>
+		/// <returns> Результат перевода. </returns>
 		private static double ParseDouble(string name)
 		{
 			if (double.TryParse(Console.ReadLine(), out double result))
@@ -558,12 +703,16 @@ namespace MyMovies.CMD
 			}
 			else
 			{
-				Console.WriteLine($"Неверный формат поля {name}");
+				Console.WriteLine($"Неверный формат поля {name}.");
 				GoToCurrentLocation();
 				return 0;
 			}
 		}
 
+		/// <summary>
+		/// Перевести жанры в корректный список.
+		/// </summary>
+		/// <returns> Результат перевода. </returns>
 		private static IEnumerable<Genre> ParseGenres()
 		{
 			string genre = Console.ReadLine();
@@ -586,10 +735,16 @@ namespace MyMovies.CMD
 			}
 		}
 
-		private static int ParseIntCommand(string message, int listLength)
+		/// <summary>
+		/// Перевести строку в целое число для использования команды.
+		/// </summary>
+		/// <param name="message"> Сообщение для конкретной команды. </param>
+		/// <param name="itemsCount"> Количество элементов. </param>
+		/// <returns> Результат перевода. </returns>
+		private static int ParseIntCommand(string message, int itemsCount)
 		{
 			Console.Write($"\n{message}");
-			if (int.TryParse(Console.ReadLine(), out int result) && result > 0 && result <= listLength)
+			if (int.TryParse(Console.ReadLine(), out int result) && result > 0 && result <= itemsCount)
 			{
 				return result;
 			}
@@ -600,6 +755,9 @@ namespace MyMovies.CMD
 			}
 		}
 
+		/// <summary>
+		/// Перейти в текущее местоположение.
+		/// </summary>
 		private static void GoToCurrentLocation()
 		{
 			Console.Clear();
@@ -609,7 +767,7 @@ namespace MyMovies.CMD
 			switch (_location)
 			{
 				case Location.Catalogs:
-					ShowList(_catalogController.Catalogs);
+					ShowNumberedList(_catalogController.Catalogs);
 					break;
 
 				case Location.Movies:
@@ -619,6 +777,9 @@ namespace MyMovies.CMD
 			}
 		}
 
+		/// <summary>
+		/// Обновить команды.
+		/// </summary>
 		private static void UpdateCommands()
 		{
 			_commandController = new CommandController();
@@ -627,7 +788,7 @@ namespace MyMovies.CMD
 			{
 				_commandController.Adding += AddCatalog;
 				_commandController.Opening += OpenCatalog;
-				_commandController.Updating += UpdateCatalog;
+				_commandController.Changing += ChangeCatalog;
 				_commandController.Removing += RemoveCatalog;
 				_commandController.OrderingByName += OrderByNameCatalogs;
 				_commandController.OrderingByDate += OrderByDateCatalogs;
@@ -637,7 +798,7 @@ namespace MyMovies.CMD
 			{
 				_commandController.Adding += AddMovie;
 				_commandController.Opening += OpenMovie;
-				_commandController.Updating += UpdateMovie;
+				_commandController.Changing += ChangeMovie;
 				_commandController.Removing += RemoveMovie;
 				_commandController.OrderingByName += OrderByNameMovies;
 				_commandController.OrderingByDate += OrderByDateMovies;

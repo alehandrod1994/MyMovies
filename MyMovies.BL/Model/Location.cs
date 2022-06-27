@@ -2,9 +2,12 @@
 
 namespace MyMovies.BL.Model
 {
-    public enum Location
-    {
-        Catalogs,
-        Movies
-    }
+	/// <summary>
+	/// Местоположение.
+	/// </summary>
+	public enum Location
+	{
+		Catalogs,
+		Movies
+	}
 }

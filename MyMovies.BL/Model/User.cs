@@ -2,31 +2,49 @@
 
 namespace MyMovies.BL.Model
 {
-    [Serializable]
-    public class User
-    {
-        public User(string name, string password)
-        {
-            if (string.IsNullOrWhiteSpace(name))
-            {
-                throw new ArgumentNullException("Имя пользователя не может быть пустым", nameof(name));
-            }
+	/// <summary>
+	/// Пользователь.
+	/// </summary>
 
-            if (string.IsNullOrWhiteSpace(password))
-            {
-                throw new ArgumentNullException("Пароль пользователя не может быть пустым", nameof(password));
-            }
+	[Serializable]
+	public class User
+	{
+		/// <summary>
+		/// Создать нового пользователя.
+		/// </summary>
+		/// <param name="name"> Имя. </param>
+		/// <param name="password"> Пароль. </param>
+		public User(string name, string password)
+		{
+			#region Проверка условий
+			if (string.IsNullOrWhiteSpace(name))
+			{
+				throw new ArgumentNullException("Имя пользователя не может быть пустым.", nameof(name));
+			}
 
-            Name = name;
-            Password = password;
-        }
+			if (string.IsNullOrWhiteSpace(password))
+			{
+				throw new ArgumentNullException("Пароль пользователя не может быть пустым.", nameof(password));
+			}
+			#endregion
 
-        public string Name { get; }
-        public string Password { get; }
+			Name = name;
+			Password = password;
+		}
 
-        public override string ToString()
-        {
-            return Name;
-        }
-    }
+		/// <summary>
+		/// Имя.
+		/// </summary>
+		public string Name { get; }
+
+		/// <summary>
+		/// Пароль.
+		/// </summary>
+		public string Password { get; }
+
+		public override string ToString()
+		{
+			return Name;
+		}
+	}
 }

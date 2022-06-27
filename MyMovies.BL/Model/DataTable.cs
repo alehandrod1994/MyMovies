@@ -4,21 +4,35 @@ using System.Collections.Generic;
 
 namespace MyMovies.BL
 {
-    public class DataTable
-    {
-        public DataTable(string[] columnsNames)
-        {
-            if (columnsNames is null)
-            {
-                throw new ArgumentNullException("Имена полей не могут быть пустыми", nameof(columnsNames));
-            }
+	/// <summary>
+	/// Таблица.
+	/// </summary>
+	public class DataTable
+	{
+		/// <summary>
+		/// Создать новую таблицу.
+		/// </summary>
+		/// <param name="columnsNames"> Названия столбцов. </param>
+		public DataTable(string[] columnsNames)
+		{
+			ColumnsNames = columnsNames ?? throw new ArgumentNullException("Названия столбцов не могут быть пустыми.", nameof(columnsNames));
+						 
+			Rows = new List<Row>();            
+		}
 
-            ColumnsNames = columnsNames;  
-            Rows = new List<Row>();
-        }
+		/// <summary>
+		/// Названия столбцов.
+		/// </summary>
+		public string[] ColumnsNames { get; }
 
-        public string[] ColumnsNames { get; }
-        public int ColumnCount => ColumnsNames.Length;
-        public List<Row> Rows { get; set; }
-    }
+		/// <summary>
+		/// Количество столбцов.
+		/// </summary>
+		public int ColumnCount => ColumnsNames.Length;
+
+		/// <summary>
+		/// Строки.
+		/// </summary>
+		public List<Row> Rows { get; set; }
+	}
 }

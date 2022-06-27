@@ -2,46 +2,97 @@
 
 namespace MyMovies.BL.Controller
 {
+	/// <summary>
+	/// Контроллер команд.
+	/// </summary>
 	public class CommandController
 	{
+		/// <summary>
+		/// Происходит при вызове команды добавления.
+		/// </summary>
 		public event Action Adding;
+
+		/// <summary>
+		/// Происходит при вызове команды открытия.
+		/// </summary>
 		public event Action Opening;
-		public event Action Updating;
+
+		/// <summary>
+		/// Происходит при вызове команды изменения.
+		/// </summary>
+		public event Action Changing;
+
+		/// <summary>
+		/// Происходит при вызове команды удаления.
+		/// </summary>
 		public event Action Removing;
+
+		/// <summary>
+		/// Происходит при вызове команды сортировки по названию.
+		/// </summary>
 		public event Action OrderingByName;
+
+		/// <summary>
+		/// Происходит при вызове команды сортировки по дате добавления.
+		/// </summary>
 		public event Action OrderingByDate;
+
+		/// <summary>
+		/// Происходит при вызове команды поиска.
+		/// </summary>
 		public event Action Finding;
 
+		/// <summary>
+		/// Добавить.
+		/// </summary>
 		public void Add()
 		{
 			Adding?.Invoke();
 		}
 
+		/// <summary>
+		/// Открыть.
+		/// </summary>
 		public void Open()
 		{
 			Opening?.Invoke();
 		}
 
-		public void Update()
+		/// <summary>
+		/// Изменить.
+		/// </summary>
+		public void Change()
 		{
-			Updating?.Invoke();
+			Changing?.Invoke();
 		}
 
+		/// <summary>
+		/// Удалить.
+		/// </summary>
 		public void Remove()
 		{
 			Removing?.Invoke();
 		}
 
+		/// <summary>
+		/// Сортировать по названию.
+		/// </summary>
 		public void OrderByName()
 		{
 			OrderingByName?.Invoke();
 		}
 
+		/// <summary>
+		/// Сортировать по дате добавления.
+		/// </summary>
 		public void OrderByDate()
 		{
 			OrderingByDate?.Invoke();
 		}
 
+		/// <summary>
+		/// Искать.
+		/// </summary>
 		public void Find()
 		{
 			Finding?.Invoke();

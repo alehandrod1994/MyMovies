@@ -1,57 +1,63 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace MyMovies.BL.Model
 {
-    [Serializable]
-    public class Catalog
-    {
-        public Catalog(string name, User user)
-        {
-            if (string.IsNullOrWhiteSpace(name))
-            {
-                throw new ArgumentNullException("Задано неверное имя каталога", nameof(name));
-            }
+	/// <summary>
+	/// Каталог.
+	/// </summary>
 
-            if (user is null)
-            {
-                throw new ArgumentNullException("Задано неверное имя пользователя", nameof(user));
-            }
+	[Serializable]
+	public class Catalog
+	{
+		/// <summary>
+		/// Создать новый каталог.
+		/// </summary>
+		/// <param name="name"> Название. </param>
+		/// <param name="user"> Пользователь. </param>
+		public Catalog(string name, User user)
+		{
+			#region Проверка условий
+			if (string.IsNullOrWhiteSpace(name))
+			{
+				throw new ArgumentNullException("Название каталога не может быть пустым.", nameof(name));
+			}
 
-            Name = name;
-            Movies = new List<Movie>();
-            User = user;
-            AdditionDate = DateTime.Now;
-        }
+			if (user is null)
+			{
+				throw new ArgumentNullException("Пользователь не может быть пустым.", nameof(user));
+			}
+			#endregion
 
-        public string Name { get; set; }
-        public List<Movie> Movies { get; set; }
-        public User User { get; }
-        public DateTime AdditionDate { get; }
+			Name = name;
+			Movies = new List<Movie>();
+			User = user;
+			AdditionDate = DateTime.Now;
+		}
 
-        public string Add(Movie movie)
-        {
-            var movieFounded = Movies.SingleOrDefault(m => m.Name == movie.Name && m.OriginalName == movie.OriginalName && m.Year == movie.Year);
+		/// <summary>
+		/// Название.
+		/// </summary>
+		public string Name { get; set; }
 
-            string message = "";
+		/// <summary>
+		/// Список фильмов в каталоге.
+		/// </summary>
+		public List<Movie> Movies { get; set; }
 
-            if (movieFounded == null)
-            {
-                Movies.Add(movie);
-                message = "Фильм успешно добавлен.";
-            }
-            else
-            {
-                message = "Такой фильм уже есть.";
-            }
+		/// <summary>
+		/// Владелец каталога.
+		/// </summary>
+		public User User { get; }
 
-            return message;
-        }
-
-        public override string ToString()
-        {
-            return Name;
-        }
-    }
+		/// <summary>
+		/// Дата добавления.
+		/// </summary>
+		public DateTime AdditionDate { get; }
+		
+		public override string ToString()
+		{
+			return Name;
+		}
+	}
 }

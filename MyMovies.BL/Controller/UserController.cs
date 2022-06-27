@@ -5,48 +5,65 @@ using System.Linq;
 
 namespace MyMovies.BL.Controller
 {
-    /// <summary>
-    /// Контроллер пользователя.
-    /// </summary>   
-    public class UserController : ControllerBase
-    {
-        public UserController(string userName, string password)
-        {
-            if (string.IsNullOrWhiteSpace(userName))
-            {
-                throw new ArgumentNullException("Имя пользователя не может быть пустым", nameof(userName));
-            }
+	/// <summary>
+	/// Контроллер пользователя.
+	/// </summary>   
+	public class UserController : ControllerBase
+	{
+		/// <summary>
+		/// Создать новый контроллер пользователя.
+		/// </summary>
+		/// <param name="userName"> Имя. </param>
+		/// <param name="password"> Пароль. </param>
+		public UserController(string userName, string password)
+		{
+			#region Проверка условий
+			if (string.IsNullOrWhiteSpace(userName))
+			{
+				throw new ArgumentNullException("Имя пользователя не может быть пустым.", nameof(userName));
+			}
 
-            if (string.IsNullOrWhiteSpace(password))
-            {
-                throw new ArgumentNullException("Пароль пользователя не может быть пустым", nameof(password));
-            }
+			if (string.IsNullOrWhiteSpace(password))
+			{
+				throw new ArgumentNullException("Пароль пользователя не может быть пустым.", nameof(password));
+			}
+			#endregion
 
-            Users = GetUsersData();
+			Users = GetUsersData();
 
-            CurrentUser = Users.SingleOrDefault(user => user.Name == userName);
+			CurrentUser = Users.SingleOrDefault(user => user.Name == userName);
 
-            if (CurrentUser == null)
-            {
-                CurrentUser = new User(userName, password);
-                Users.Add(CurrentUser);
-                IsNewUser = true;
-                Save();
-            }
-        }
+			if (CurrentUser == null)
+			{
+				CurrentUser = new User(userName, password);
+				Users.Add(CurrentUser);
+				IsNewUser = true;
+				Save(Users);
+			}
+		}
 
-        public List<User> Users { get; }
-        public User CurrentUser { get; }
-        public bool IsNewUser { get; } = false;
+		/// <summary>
+		/// Список пользователей.
+		/// </summary>
+		public List<User> Users { get; }
 
-        public List<User> GetUsersData()
-        {
-            return Load<User>() ?? new List<User>();          
-        }
+		/// <summary>
+		/// Текущий пользователь.
+		/// </summary>
+		public User CurrentUser { get; }
 
-        public void Save()
-        {
-            Save(Users);
-        }
-    }
+		/// <summary>
+		/// Возвращает значение, указывающее новый ли пользователь.
+		/// </summary>
+		public bool IsNewUser { get; } = false;
+
+		/// <summary>
+		/// Получить список пользователей.
+		/// </summary>
+		/// <returns> Пользователи приложения. </returns>
+		public List<User> GetUsersData()
+		{
+			return Load<User>() ?? new List<User>();          
+		}
+	}
 }

@@ -2,34 +2,40 @@
 
 namespace MyMovies.BL.Model
 {
-    [Serializable]
-    public class Genre
-    {
-        public Genre(string name)
-        {
-            if (string.IsNullOrWhiteSpace(name))
-            {
-                throw new ArgumentNullException("Жанр фильма не может быть пустым", nameof(name));
-            }
+	/// <summary>
+	/// Жанр.
+	/// </summary>
+	
+	[Serializable]
+	public class Genre
+	{
+		/// <summary>
+		/// Создать новый жанр.
+		/// </summary>
+		/// <param name="name"> Название. </param>
+		public Genre(string name)
+		{
+			Name = name ?? throw new ArgumentNullException("Жанр фильма не может быть пустым.", nameof(name));			
+		}
 
-            Name = name;
-        }
+		/// <summary>
+		/// Название.
+		/// </summary>
+		public string Name { get; }
 
-        public string Name { get; }
+		public override string ToString()
+		{
+			return Name;
+		}
 
-        public override string ToString()
-        {
-            return Name;
-        }
+		public override bool Equals(object obj)
+		{
+			return Name == ((Genre)obj).Name;
+		}
 
-        public override bool Equals(object obj)
-        {
-            return Name == ((Genre)obj).Name;
-        }
-
-        public override int GetHashCode()
-        {
-            return Name.GetHashCode();
-        }
-    }
+		public override int GetHashCode()
+		{
+			return Name.GetHashCode();
+		}
+	}
 }
