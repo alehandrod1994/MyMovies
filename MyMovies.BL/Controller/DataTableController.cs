@@ -82,10 +82,16 @@ namespace MyMovies.BL.Controller
 				}
 			}
 
+			nameLength = CalculateLength("Название".Length, nameLength);
+			originalNameLength = CalculateLength("Оригинальное название".Length, originalNameLength);
+			directorLength = CalculateLength("Режиссёр".Length, directorLength);
+			watchedLength = CalculateLength("Просмотрено".Length, watchedLength);
+			genresLength = CalculateLength("Жанр".Length, genresLength);
+
 			int numberLength = 5;
 			int yearLength = 4;
-			int ratingLength = 3;
-			int additionDateCount = 10;
+			int ratingLength = 7;
+			int additionDateCount = 10;			
 
 			int[] length = new int[]
 			{

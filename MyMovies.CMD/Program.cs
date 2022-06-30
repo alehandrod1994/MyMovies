@@ -321,7 +321,7 @@ namespace MyMovies.CMD
 				_dataTableController.SetMoviesData(_catalogController.CurrentCatalog.Movies);
 
 				int[] columnsLength = _dataTableController.GetMaxLengthMoviesProperties(_catalogController.CurrentCatalog.Movies);
-				int tableWidth = columnsLength.Sum() + _dataTableController.DataTable.ColumnCount + 1;
+				int tableWidth = Console.WindowWidth - 1;
 
 				DrawColumns(_dataTableController.DataTable.ColumnsNames, columnsLength, tableWidth);
 
