@@ -59,6 +59,7 @@ namespace MyMovies.CMD
 				"D - УДАЛИТЬ каталог",
 				"S - СОРТИРОВАТЬ каталоги",
 				"P - ИСКАТЬ каталог",
+				"R - ВЫБРАТЬ СЛУЧАЙНЫЙ каталог",
 				"ESC - ВЫХОД в главное меню"
 			});
 
@@ -70,6 +71,7 @@ namespace MyMovies.CMD
 				"D - УДАЛИТЬ фильм",
 				"S - СОРТИРОВАТЬ фильмы",
 				"P - ИСКАТЬ фильм",
+				"R - ВЫБРАТЬ СЛУЧАЙНЫЙ фильм",
 				"F - ФИЛЬТРОВАТЬ фильмы по жанру",
 				"ESC - ВЫХОД в главное меню"
 			});
@@ -136,6 +138,17 @@ namespace MyMovies.CMD
 						}
 						break;
 
+					case ConsoleKey.P:
+						Console.WriteLine();
+						_commandController.Find();
+						break;
+
+					case ConsoleKey.R:
+						Console.Clear();
+						ShowCommands();
+						_commandController.SelectRandom();
+						break;
+
 					case ConsoleKey.F:
 						if (_location == Location.Movies)
 						{
@@ -149,10 +162,7 @@ namespace MyMovies.CMD
 
 						break;
 
-					case ConsoleKey.P:
-						Console.WriteLine();
-						_commandController.Find();
-						break;
+					
 
 					case ConsoleKey.Escape:
 						_location = Location.Catalogs;
@@ -457,6 +467,16 @@ namespace MyMovies.CMD
 		}
 
 		/// <summary>
+		/// Выбрать случайный каталог.
+		/// </summary>
+		private static void SelectRandomCatalog()
+		{
+			int index = _catalogController.SelectRandomCatalog();
+			Console.WriteLine($"{index + 1}. {_catalogController.Catalogs[index]}");
+		}
+
+
+		/// <summary>
 		/// Добавить фильм.
 		/// </summary>
 		private static void AddMovie()
@@ -653,6 +673,15 @@ namespace MyMovies.CMD
 		}
 
 		/// <summary>
+		/// Выбрать случайный фильм.
+		/// </summary>
+		private static void SelectRandomMovie()
+		{
+			int index = _catalogController.SelectRandomMovie();
+			Console.WriteLine($"{index + 1}. {_catalogController.CurrentCatalog.Movies[index]}");
+		}
+
+		/// <summary>
 		/// Фильтровать фильмы по жанру.
 		/// </summary>
 		public static void FiltByGenres()
@@ -793,6 +822,7 @@ namespace MyMovies.CMD
 				_commandController.OrderingByName += OrderByNameCatalogs;
 				_commandController.OrderingByDate += OrderByDateCatalogs;
 				_commandController.Finding += FindCatalogs;
+				_commandController.SelectingRandom += SelectRandomCatalog;
 			}
 			else
 			{
@@ -803,6 +833,7 @@ namespace MyMovies.CMD
 				_commandController.OrderingByName += OrderByNameMovies;
 				_commandController.OrderingByDate += OrderByDateMovies;
 				_commandController.Finding += FindMovies;
+				_commandController.SelectingRandom += SelectRandomMovie;
 			}
 		}
 	}

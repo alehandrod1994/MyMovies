@@ -154,6 +154,16 @@ namespace MyMovies.BL.Controller
 		}
 
 		/// <summary>
+		/// Выбрать случайный каталог.
+		/// </summary>
+		/// <returns> Каталог. </returns>
+		public int SelectRandomCatalog()
+		{
+			var rnd = new Random();
+			return rnd.Next(0, Catalogs.Count);
+		}
+
+		/// <summary>
 		/// Добавить фильм в текущий каталог.
 		/// </summary>
 		/// <param name="movie"> Фильм. </param>
@@ -244,6 +254,17 @@ namespace MyMovies.BL.Controller
 		{
 			return CurrentCatalog.Movies.FindAll(m => m.Name.Contains(movieName));
 		}
+
+		/// <summary>
+		/// Выбрать случайный фильм.
+		/// </summary>
+		/// <returns> Фильм. </returns>
+		public int SelectRandomMovie()
+		{
+			var rnd = new Random();
+			return rnd.Next(0, CurrentCatalog.Movies.Count);
+		}
+
 
 		/// <summary>
 		/// Фильтровать фильмы по жанру.

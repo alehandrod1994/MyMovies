@@ -43,6 +43,11 @@ namespace MyMovies.BL.Controller
 		public event Action Finding;
 
 		/// <summary>
+		/// Происходит при вызове команды выбора случайного элемента.
+		/// </summary>
+		public event Action SelectingRandom;
+
+		/// <summary>
 		/// Добавить.
 		/// </summary>
 		public void Add()
@@ -96,6 +101,14 @@ namespace MyMovies.BL.Controller
 		public void Find()
 		{
 			Finding?.Invoke();
+		}
+
+		/// <summary>
+		/// Выбрать случайный элемент.
+		/// </summary>
+		public void SelectRandom()
+		{
+			SelectingRandom?.Invoke();
 		}
 	}
 }
