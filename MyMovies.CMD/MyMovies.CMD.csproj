@@ -59,5 +59,10 @@
       <Name>MyMovies.BL</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Languages\Messages.en-us.resx" />
+    <EmbeddedResource Include="Languages\Messages.resx" />
+    <EmbeddedResource Include="Languages\Messages.ru-ru.resx" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

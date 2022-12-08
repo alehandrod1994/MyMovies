@@ -2,7 +2,9 @@
 using MyMovies.BL.Model;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
+using System.Resources;
 using System.Threading;
 
 namespace MyMovies.CMD
@@ -37,56 +39,80 @@ namespace MyMovies.CMD
 		/// </summary>
 		private static readonly Dictionary<Location, List<string>> _commands = new Dictionary<Location, List<string>>();
 
+		/// <summary>
+		/// Локализация.
+		/// </summary>
+		private static CultureInfo _culture = CultureInfo.CurrentCulture;
+		private static ResourceManager _resourceManager = new ResourceManager("MyMovies.CMD.Languages.Messages", typeof(Program).Assembly);
+
 		static void Main(string[] args)
 		{
-			Console.WriteLine("Вас приветствует приложение MyMovies!");
+			int language = 0;
+			while (language != 1 && language != 2)
+			{
+				Console.Write($"{GetLocalization("ChooseLanguage")}: \n'1' - русский, '2' - английский: ");
+				if (int.TryParse(Console.ReadLine(), out language))
+				{
+					if (language == 1)
+					{
+						_culture = CultureInfo.CreateSpecificCulture("ru-ru");
+					}
+					else if (language == 2)
+					{
+						_culture = CultureInfo.CreateSpecificCulture("en-us");
+					}
+				}
+			}
+			Console.Clear();
 
-			Console.WriteLine("Введите имя пользователя:");
+			Console.WriteLine(GetLocalization("Greeting"));
+
+			Console.WriteLine($"{GetLocalization("EnterUserName")}:");
 			var name = Console.ReadLine();
 
-			Console.WriteLine("Введите пароль пользователя:");
+			Console.WriteLine($"{GetLocalization("EnterUserPassword")}:");
 			var password = Console.ReadLine();
 
 			var userController = new UserController(name, password);
 			_catalogController = new CatalogController(userController.CurrentUser);
-			_commandController = new CommandController();
-
-			_commands.Add(Location.Catalogs, new List<string>
-			{
-				"A - ДОБАВИТЬ каталог",
-				"O - ОТКРЫТЬ каталог",
-				"C - ИЗМЕНИТЬ каталог",
-				"D - УДАЛИТЬ каталог",
-				"S - СОРТИРОВАТЬ каталоги",
-				"P - ИСКАТЬ каталог",
-				"R - ВЫБРАТЬ СЛУЧАЙНЫЙ каталог",
-				"ESC - ВЫХОД в главное меню"
-			});
-
-			_commands.Add(Location.Movies, new List<string>
-			{
-				"A - ДОБАВИТЬ фильм",
-				"O - ОТКРЫТЬ фильм",
-				"C - ИЗМЕНИТЬ фильм",
-				"D - УДАЛИТЬ фильм",
-				"S - СОРТИРОВАТЬ фильмы",
-				"P - ИСКАТЬ фильм",
-				"R - ВЫБРАТЬ СЛУЧАЙНЫЙ фильм",
-				"F - ФИЛЬТРОВАТЬ фильмы по жанру",
-				"ESC - ВЫХОД в главное меню"
-			});
-
-			_catalogController.ShowMessage += ShowMessage;
-
+			
 			if (!userController.IsNewUser && password != userController.CurrentUser.Password)
 			{
 				while (password != userController.CurrentUser.Password)
 				{
-					Console.WriteLine("Неверный пароль. Введите ещё раз.");
+					Console.WriteLine(GetLocalization("WrongPassword"));
 					password = Console.ReadLine();
 
 				}
 			}
+
+			_commandController = new CommandController();
+			_commands.Add(Location.Catalogs, new List<string>
+			{
+				GetLocalization("AddCatalog"),
+				GetLocalization("OpenCatalog"),
+				GetLocalization("ChangeCatalog"),
+				GetLocalization("RemoveCatalog"),
+				GetLocalization("SortingCatalogs"),
+				GetLocalization("FindCatalogs"),
+				GetLocalization("SelectRandomCatalog"),
+				GetLocalization("Exit")
+			});
+
+			_commands.Add(Location.Movies, new List<string>
+			{
+				GetLocalization("AddMovie"),
+				GetLocalization("OpenMovie"),
+				GetLocalization("ChangeMovie"),
+				GetLocalization("RemoveMovie"),
+				GetLocalization("SortingMovies"),
+				GetLocalization("FindMovies"),
+				GetLocalization("SelectRandomMovie"),
+				GetLocalization("FiltMovies"),
+				GetLocalization("Exit")
+			});
+
+			_catalogController.ShowMessage += ShowMessage;
 
 			ShowMainMenu(userController.CurrentUser.Name);
 
@@ -94,7 +120,7 @@ namespace MyMovies.CMD
 			{
 				Console.ForegroundColor = ConsoleColor.Yellow;				
 				Console.WriteLine();
-				Console.Write("Команда> ");
+				Console.Write($"{GetLocalization("Command")}> ");
 				Console.ResetColor();
 
 				var key = Console.ReadKey();
@@ -120,20 +146,26 @@ namespace MyMovies.CMD
 
 					case ConsoleKey.S:
 						Console.WriteLine();
-						Console.Write("Введите '1', чтобы сортировать по названию, '2' - сортировать по дате: ");     
+						Console.Write($"{GetLocalization("SortingByNameOrByDate")}: ");     
 
 						switch (Console.ReadLine())
 						{
 							case "1":
+								Console.Clear();
+								ShowCommands();
+
 								_commandController.OrderByName();
 								break;
 
 							case "2":
+								Console.Clear();
+								ShowCommands();
+
 								_commandController.OrderByDate();
 								break;
 
 							default:
-								ShowMessage("Неверная команда.", false);
+								ShowMessage(GetLocalization("WrongCommand"), false);
 								break;
 						}
 						break;
@@ -146,23 +178,22 @@ namespace MyMovies.CMD
 					case ConsoleKey.R:
 						Console.Clear();
 						ShowCommands();
+
 						_commandController.SelectRandom();
 						break;
 
 					case ConsoleKey.F:
+						Console.WriteLine();
+
 						if (_location == Location.Movies)
 						{
-							Console.WriteLine();
 							FiltByGenres();
 						}
 						else
 						{
-							ShowMessage("Неизвестная команда.", false);
+							ShowMessage(GetLocalization("UnknownCommand"), false);
 						}
-
-						break;
-
-					
+						break;					
 
 					case ConsoleKey.Escape:
 						_location = Location.Catalogs;
@@ -172,7 +203,7 @@ namespace MyMovies.CMD
 
 					default:
 						Console.WriteLine();
-						ShowMessage("Неизвестная команда.", false);
+						ShowMessage(GetLocalization("UnknownCommand"), false);
 						break;
 				}
 			}
@@ -187,7 +218,7 @@ namespace MyMovies.CMD
 			_location = Location.Catalogs;
 			UpdateCommands();
 
-			ShowMessage($"Добро пожаловать, {userName}!", true);		
+			ShowMessage($"{GetLocalization("Welcome")}, {userName}!", true);		
 		}
 
 		/// <summary>
@@ -205,7 +236,7 @@ namespace MyMovies.CMD
 			}
 			else
 			{
-				Console.WriteLine("Пусто...");
+				Console.WriteLine(GetLocalization("Empty"));
 			}
 		}
 
@@ -224,7 +255,7 @@ namespace MyMovies.CMD
 			}
 			else
 			{
-				Console.WriteLine("Пусто...");
+				Console.WriteLine(GetLocalization("Empty"));
 			}
 		}
 
@@ -256,7 +287,7 @@ namespace MyMovies.CMD
 		private static void ShowCommands()
 		{
 			Console.ForegroundColor = ConsoleColor.Yellow;
-			Console.WriteLine("КОМАНДЫ:");
+			Console.WriteLine($"{GetLocalization("Commands")}:");
 
 			List<string> commands = _commands[_location];
 			foreach (var command in commands)
@@ -316,15 +347,15 @@ namespace MyMovies.CMD
 			{
 				string[] columnsNames = new string[]
 				{
-					"Номер",
-					"Название",
-					"Оригинальное название",
-					"Год",
-					"Режиссёр",
-					"Рейтинг",
-					"Жанр",
-					"Просмотрен",
-					"Дата"
+					GetLocalization("MovieNumber"),
+					GetLocalization("MovieName"),
+					GetLocalization("MovieOriginalName"),
+					GetLocalization("MovieYear"),
+					GetLocalization("MovieDirector"),
+					GetLocalization("MovieRating"),
+					GetLocalization("MovieGenres"),
+					GetLocalization("MovieWatched"),
+					GetLocalization("MovieDate"),
 				};
 
 				_dataTableController = new DataTableController(columnsNames);
@@ -342,7 +373,7 @@ namespace MyMovies.CMD
 			}
 			else
 			{
-				Console.WriteLine("Пусто...");
+				Console.WriteLine(GetLocalization("Empty"));
 			}			
 		}
 
@@ -391,7 +422,7 @@ namespace MyMovies.CMD
 		/// </summary>
 		private static void AddCatalog()
 		{			
-			Console.Write("Введите название для нового каталога: ");
+			Console.Write($"{GetLocalization("EnterCatalogName")}: ");
 			string newCatalogName = Console.ReadLine();
 			_catalogController.AddCatalog(newCatalogName);
 		}
@@ -401,7 +432,7 @@ namespace MyMovies.CMD
 		/// </summary>
 		private static void OpenCatalog()
 		{
-			int index = ParseIntCommand("Введите номер каталога, который хотите открыть: ", _catalogController.Catalogs.Count);
+			int index = ParseIntCommand($"{GetLocalization("EnterCatalogNumberToOpen")}: ", _catalogController.Catalogs.Count);
 			if (index == 0) return;
 
 			_catalogController.CurrentCatalog = _catalogController.Catalogs[index - 1];
@@ -416,7 +447,7 @@ namespace MyMovies.CMD
 		/// </summary>
 		private static void ChangeCatalog()
 		{
-			int index = ParseIntCommand("Введите номер каталога, который хотите переименовать: ", _catalogController.Catalogs.Count);
+			int index = ParseIntCommand($"{GetLocalization("EnterCatalogNumberToChange")}: ", _catalogController.Catalogs.Count);
 			if (index == 0) return;
 
 			Console.Write($"Введите новое имя для каталога {_catalogController.Catalogs[index - 1].Name}: ");
@@ -429,7 +460,7 @@ namespace MyMovies.CMD
 		/// </summary>
 		private static void RemoveCatalog()
 		{
-			int index = ParseIntCommand("Введите номер каталога, который хотите удалить: ", _catalogController.Catalogs.Count);
+			int index = ParseIntCommand($"{GetLocalization("EnterCatalogNumberToRemove")}: ", _catalogController.Catalogs.Count);
 			if (index == 0) return;
 
 			_catalogController.RemoveCatalog(index - 1);
@@ -460,9 +491,11 @@ namespace MyMovies.CMD
 		/// </summary>
 		private static void FindCatalogs()
 		{
-			Console.WriteLine("Введите название каталога, который нужно найти: ");
+			Console.Write($"{GetLocalization("EnterCatalogNameToFind")}: ");
 			var catalogs = _catalogController.FindCatalogs(Console.ReadLine());
 
+			Console.Clear();
+			ShowCommands();
 			ShowNumberedList(catalogs);
 		}
 
@@ -481,27 +514,27 @@ namespace MyMovies.CMD
 		/// </summary>
 		private static void AddMovie()
 		{
-			Console.Write("Введите название фильма: ");
+			Console.Write($"{GetLocalization("EnterMovieName")}: ");
 			string name = Console.ReadLine();
 
-			Console.Write("Введите оригинальное название: ");
+			Console.Write($"{GetLocalization("EnterMovieOriginalName")}: ");
 			string originalName = Console.ReadLine();
 
-			Console.Write("Введите год: ");
-			int year = ParseInt("год");
+			Console.Write($"{GetLocalization("EnterMovieYear")}: ");
+			int year = ParseInt(GetLocalization("Year"));
 
-			Console.Write("Введите режиссёра: ");
+			Console.Write($"{GetLocalization("EnterMovieDirector")}: ");
 			string director = Console.ReadLine();
 
-			Console.Write("Введите рейтинг (разделительный знак - запятая): ");
-			double rating = ParseDouble("рейтинг");
+			Console.Write($"{GetLocalization("EnterMovieRating")}: ");
+			double rating = ParseDouble(GetLocalization("Rating"));
 
 			ShowNumberedList(_catalogController.Genres);
-			Console.Write("Введите жанры через запятую: ");			
+			Console.Write($"{GetLocalization("EnterMovieGenres")}: ");
 			var genres = new List<Genre>();
 			genres.AddRange(ParseGenres());
 
-			Console.Write("Введите просмотрен ли фильм (да/нет/частично): ");
+			Console.Write($"{GetLocalization("EnterMovieWatched")}: ");
 			string watched = Console.ReadLine();
 
 			var movie = new Movie(name, originalName, year, director, rating, genres, watched);
@@ -513,20 +546,20 @@ namespace MyMovies.CMD
 		/// </summary>
 		private static void OpenMovie()
 		{
-			int index = ParseIntCommand("Введите номер фильма, который хотите открыть: ", _catalogController.CurrentCatalog.Movies.Count);
+			int index = ParseIntCommand($"{GetLocalization("EnterMovieNumberToOpen")}: ", _catalogController.CurrentCatalog.Movies.Count);
 			if (index == 0) return;
 
 			_catalogController.CurrentMovie = _catalogController.CurrentCatalog.Movies[index - 1];
 
-			Console.WriteLine($"Название: {_catalogController.CurrentMovie.Name}");
-			Console.WriteLine($"Оригинальное название: {_catalogController.CurrentMovie.OriginalName}");
-			Console.WriteLine($"Год: {_catalogController.CurrentMovie.Year}");
-			Console.WriteLine($"Режиссёр: {_catalogController.CurrentMovie.Director}");
-			Console.WriteLine($"Рейтинг: {_catalogController.CurrentMovie.Rating}");
-			ShowInformation(_catalogController.CurrentMovie.Genres, "Жанр: ");
-			Console.WriteLine($"Просмотрен: {_catalogController.CurrentMovie.Watched}");
+			Console.WriteLine($"{GetLocalization("MovieName")}: {_catalogController.CurrentMovie.Name}");
+			Console.WriteLine($"{GetLocalization("MovieOriginalName")}: {_catalogController.CurrentMovie.OriginalName}");
+			Console.WriteLine($"{GetLocalization("MovieYear")}: {_catalogController.CurrentMovie.Year}");
+			Console.WriteLine($"{GetLocalization("MovieDirector")}: {_catalogController.CurrentMovie.Director}");
+			Console.WriteLine($"{GetLocalization("MovieRating")}: {_catalogController.CurrentMovie.Rating}");
+			ShowInformation(_catalogController.CurrentMovie.Genres, $"{GetLocalization("MovieGenres")}: ");
+			Console.WriteLine($"{GetLocalization("MovieWatched")}: {_catalogController.CurrentMovie.Watched}");
 
-			Console.WriteLine("\nНажмите любую клавишу для возврата к списку фильмов...");
+			Console.WriteLine($"\n{GetLocalization("PressAnyKey")}");
 			Console.ReadKey();
 			GoToCurrentLocation();
 		}
@@ -536,20 +569,20 @@ namespace MyMovies.CMD
 		/// </summary>
 		private static void ChangeMovie()
 		{
-			int index = ParseIntCommand("Введите номер фильма, который хотите изменить: ", _catalogController.CurrentCatalog.Movies.Count);
+			int index = ParseIntCommand($"{GetLocalization("EnterMovieNumberToChange")}: ", _catalogController.CurrentCatalog.Movies.Count);
 			if (index == 0) return;
 
 			List<Genre> gg = _catalogController.CurrentCatalog.Movies[0].Genres;
 
 			_catalogController.CurrentMovie = _catalogController.CurrentCatalog.Movies[index - 1];
 
-			Console.WriteLine($"1. Название: {_catalogController.CurrentMovie.Name}");
-			Console.WriteLine($"2. Оригинальное название: {_catalogController.CurrentMovie.OriginalName}");
-			Console.WriteLine($"3. Год: {_catalogController.CurrentMovie.Year}");
-			Console.WriteLine($"4. Режиссёр: {_catalogController.CurrentMovie.Director}");
-			Console.WriteLine($"5. Рейтинг: {_catalogController.CurrentMovie.Rating}");
-			ShowInformation(_catalogController.CurrentMovie.Genres, "6. Жанр: ");
-			Console.WriteLine($"7. Просмотрен: {_catalogController.CurrentMovie.Watched}");
+			Console.WriteLine($"1. {GetLocalization("MovieName")}: {_catalogController.CurrentMovie.Name}");
+			Console.WriteLine($"2. {GetLocalization("MovieOriginalName")}: {_catalogController.CurrentMovie.OriginalName}");
+			Console.WriteLine($"3. {GetLocalization("MovieYear")}: {_catalogController.CurrentMovie.Year}");
+			Console.WriteLine($"4. {GetLocalization("MovieDirector")}: {_catalogController.CurrentMovie.Director}");
+			Console.WriteLine($"5. {GetLocalization("MovieRating")}: {_catalogController.CurrentMovie.Rating}");
+			ShowInformation(_catalogController.CurrentMovie.Genres, $"6. {GetLocalization("MovieGenres")}: ");
+			Console.WriteLine($"7. {GetLocalization("MovieWatched")}: {_catalogController.CurrentMovie.Watched}");
 
 			string name = _catalogController.CurrentMovie.Name;
 			string originalName = _catalogController.CurrentMovie.OriginalName;
@@ -562,70 +595,66 @@ namespace MyMovies.CMD
 
 			while (true)
 			{
-				Console.Write($"Введите номер поля: ");
-				int fieldNumber = ParseInt("Фильм");
+				Console.Write($"{GetLocalization("EnterColumnNumber")}: ");
+				int fieldNumber = ParseInt(GetLocalization("Movie"));
 
 				switch (fieldNumber)
 				{
-					case 0:
-						return;
-
 					case 1:
-						Console.Write($"Введите название: ");
+						Console.Write($"{GetLocalization("EnterMovieName")}: ");
 						name = Console.ReadLine();
 						break;
 
 					case 2:
-						Console.Write($"Введите оригинальное название: ");
+						Console.Write($"{GetLocalization("EnterMovieOriginalName")}: ");
 						originalName = Console.ReadLine();
 						break;
 
 					case 3:
-						Console.Write($"Введите год: ");
-						year = ParseInt("год");
+						Console.Write($"{GetLocalization("EnterMovieYear")}: ");
+						year = ParseInt(GetLocalization("Year"));
 						break;
 
 					case 4:
-						Console.Write($"Введите режиссёра: ");
+						Console.Write($"{GetLocalization("EnterMovieDirector")}: ");
 						director = Console.ReadLine();
 						break;
 
 					case 5:
-						Console.Write($"Введите рейтинг: ");
-						rating = ParseDouble("рейтинг");
+						Console.Write($"{GetLocalization("EnterMovieRating")}: ");
+						rating = ParseDouble(GetLocalization("Rating"));
 						break;
 
 					case 6:
 						ShowList(_catalogController.Genres);
-						Console.Write("Введите жанры через запятую: ");						
+						Console.Write($"{GetLocalization("EnterMovieGenres")}: ");						
 						genres.Clear();
 						genres.AddRange(ParseGenres());
 						break;
 
 					case 7:
-						Console.Write("Введите просмотрен ли фильм (да/нет/частично): ");
+						Console.Write($"{GetLocalization("EnterMovieWatched")}: ");
 						watched = Console.ReadLine();
 						break;
 
-					default:
-						Console.WriteLine();
-						ShowMessage("Поле не найдено.", false);
-						break;
+					default:						
+						ShowMessage(GetLocalization("ColumnNotFound"), false);
+						return;
 				}
 
 				while (true)
 				{
-					Console.Write("Сохранить? Введите 'да', чтобы сохранить изменения, 'нет' - продолжить редактирование: ");
+					Console.Write($"{GetLocalization("SaveChanges")}: ");
 					string result = Console.ReadLine();
 
-					if (result.Equals("да", StringComparison.CurrentCultureIgnoreCase))
+					if (result.Equals(GetLocalization("Yes"), StringComparison.CurrentCultureIgnoreCase))
 					{
 						var movie = new Movie(name, originalName, year, director, rating, genres, watched, additionDate);
 						_catalogController.ChangeMovie(index - 1, movie);
 
 						return;
 					}
-					else if (result.Equals("нет", StringComparison.CurrentCultureIgnoreCase)) break;
+					else if (result.Equals(GetLocalization("No"), StringComparison.CurrentCultureIgnoreCase)) break;
 				}
 			}			
 		}
@@ -635,7 +664,7 @@ namespace MyMovies.CMD
 		/// </summary>
 		private static void RemoveMovie()
 		{
-			int index = ParseIntCommand("Введите номер фильма, который хотите удалить: ", _catalogController.CurrentCatalog.Movies.Count);
+			int index = ParseIntCommand($"{GetLocalization("EnterMovieNumberToRemove")}: ", _catalogController.CurrentCatalog.Movies.Count);
 			if (index == 0) return;
 
 			_catalogController.RemoveMovie(index - 1);
@@ -666,9 +695,11 @@ namespace MyMovies.CMD
 		/// </summary>
 		private static void FindMovies()
 		{
-			Console.Write("Введите название фильма, который нужно найти: ");
+			Console.Write($"{GetLocalization("EnterMovieNameToFind")}: ");
 			var movies = _catalogController.FindMovies(Console.ReadLine());
 
+			Console.Clear();
+			ShowCommands();
 			ShowNumberedList(movies);
 		}
 
@@ -687,7 +718,7 @@ namespace MyMovies.CMD
 		public static void FiltByGenres()
 		{
 			ShowList(_catalogController.Genres);
-			Console.Write("Введите жанры из списка через запятую: ");			
+			Console.Write($"{GetLocalization("EnterMovieGenres")}: ");			
 			var genres = new List<Genre>();
 			genres.AddRange(ParseGenres());
 
@@ -696,7 +727,6 @@ namespace MyMovies.CMD
 			Console.Clear();
 			ShowCommands();
 
-			Console.WriteLine("Фильмы по Вашему запросу:");
 			ShowNumberedList(movies);
 		}
 
@@ -713,7 +743,7 @@ namespace MyMovies.CMD
 			}
 			else
 			{
-				Console.WriteLine($"{name} не найден.");
+				Console.WriteLine($"{name} {GetLocalization("NotFound")}");
 				GoToCurrentLocation();
 				return 0;
 			}
@@ -732,7 +762,7 @@ namespace MyMovies.CMD
 			}
 			else
 			{
-				Console.WriteLine($"Неверный формат поля {name}.");
+				Console.WriteLine($"{GetLocalization("WrongFormat")} {name}.");
 				GoToCurrentLocation();
 				return 0;
 			}
@@ -779,9 +809,20 @@ namespace MyMovies.CMD
 			}
 			else
 			{
-				ShowMessage("Не найдено.", false);
+				ShowMessage(GetLocalization("NotFound"), false);
 				return 0;
 			}
+		}
+
+		/// <summary>
+		/// Получить локализированный текст в соответствии с выбранным языком.
+		/// </summary>
+		/// <param name="sourceText"> Исходный текст. </param>
+		/// <returns> Локализированный текст. </returns>
+		private static string GetLocalization(string sourceText)
+		{
+			return _resourceManager.GetString(sourceText, _culture);
+
 		}
 
 		/// <summary>

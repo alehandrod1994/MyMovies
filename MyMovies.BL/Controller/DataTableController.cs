@@ -88,7 +88,7 @@ namespace MyMovies.BL.Controller
 			watchedLength = CalculateLength("Просмотрено".Length, watchedLength);
 			genresLength = CalculateLength("Жанр".Length, genresLength);
 
-			int numberLength = 5;
+			int numberLength = 6;
 			int yearLength = 4;
 			int ratingLength = 7;
 			int additionDateCount = 10;			

@@ -1,0 +1,336 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="AddCatalog" xml:space="preserve">
+    <value>A - ДОБАВИТЬ каталог</value>
+  </data>
+  <data name="AddMovie" xml:space="preserve">
+    <value>A - ДОБАВИТЬ фильм</value>
+  </data>
+  <data name="CatalogAdded" xml:space="preserve">
+    <value>Каталог успешно добавлен.</value>
+  </data>
+  <data name="CatalogChanged" xml:space="preserve">
+    <value>Каталог успешно переименован.</value>
+  </data>
+  <data name="CatalogExist" xml:space="preserve">
+    <value>Такой каталог уже есть.</value>
+  </data>
+  <data name="CatalogRemoved" xml:space="preserve">
+    <value>Каталог успешно удалён.</value>
+  </data>
+  <data name="ChangeCatalog" xml:space="preserve">
+    <value>C - ИЗМЕНИТЬ каталог</value>
+  </data>
+  <data name="ChangeMovie" xml:space="preserve">
+    <value>C - ИЗМЕНИТЬ фильм</value>
+  </data>
+  <data name="ChooseLanguage" xml:space="preserve">
+    <value>Выберите язык</value>
+  </data>
+  <data name="ColumnNotFound" xml:space="preserve">
+    <value>Поле не найдено.</value>
+  </data>
+  <data name="Command" xml:space="preserve">
+    <value>Команда</value>
+  </data>
+  <data name="Commands" xml:space="preserve">
+    <value>КОМАНДЫ</value>
+  </data>
+  <data name="Empty" xml:space="preserve">
+    <value>Пусто...</value>
+  </data>
+  <data name="EnterCatalogName" xml:space="preserve">
+    <value>Введите название для нового каталога</value>
+  </data>
+  <data name="EnterCatalogNameToFind" xml:space="preserve">
+    <value>Введите название каталога, который нужно найти</value>
+  </data>
+  <data name="EnterCatalogNumberToChange" xml:space="preserve">
+    <value>Введите номер каталога, который хотите изменить</value>
+  </data>
+  <data name="EnterCatalogNumberToOpen" xml:space="preserve">
+    <value>Введите номер каталога, который хотите открыть</value>
+  </data>
+  <data name="EnterCatalogNumberToRemove" xml:space="preserve">
+    <value>Введите номер каталога, который хотите удалить</value>
+  </data>
+  <data name="EnterColumnNumber" xml:space="preserve">
+    <value>Введите номер поля</value>
+  </data>
+  <data name="EnterMovieDirector" xml:space="preserve">
+    <value>Введите режиссёра</value>
+  </data>
+  <data name="EnterMovieGenres" xml:space="preserve">
+    <value>Введите жанры через запятую</value>
+  </data>
+  <data name="EnterMovieName" xml:space="preserve">
+    <value>Введите название фильма</value>
+  </data>
+  <data name="EnterMovieNameToFind" xml:space="preserve">
+    <value>Введите название фильма, который нужно найти</value>
+  </data>
+  <data name="EnterMovieNumberToChange" xml:space="preserve">
+    <value>Введите номер фильма, который хотите изменить</value>
+  </data>
+  <data name="EnterMovieNumberToOpen" xml:space="preserve">
+    <value>Введите номер фильма, который хотите открыть</value>
+  </data>
+  <data name="EnterMovieNumberToRemove" xml:space="preserve">
+    <value>Введите номер фильма, который хотите удалить</value>
+  </data>
+  <data name="EnterMovieOriginalName" xml:space="preserve">
+    <value>Введите оригинальное название</value>
+  </data>
+  <data name="EnterMovieRating" xml:space="preserve">
+    <value>Введите рейтинг (разделительный знак - запятая)</value>
+  </data>
+  <data name="EnterMovieWatched" xml:space="preserve">
+    <value>Введите отметку о просмотре (да/нет/частично)</value>
+  </data>
+  <data name="EnterMovieYear" xml:space="preserve">
+    <value>Введите год</value>
+  </data>
+  <data name="EnterNewCatalogName" xml:space="preserve">
+    <value>Введите новое имя для каталога</value>
+  </data>
+  <data name="EnterUserName" xml:space="preserve">
+    <value>Введите имя пользователя</value>
+  </data>
+  <data name="EnterUserPassword" xml:space="preserve">
+    <value>Введите пароль пользователя</value>
+  </data>
+  <data name="Exit" xml:space="preserve">
+    <value>ESC - ВЫХОД в главное меню</value>
+  </data>
+  <data name="FiltMovies" xml:space="preserve">
+    <value>F - ФИЛЬТРОВАТЬ фильмы по жанру</value>
+  </data>
+  <data name="FindCatalogs" xml:space="preserve">
+    <value>P - ИСКАТЬ каталоги</value>
+  </data>
+  <data name="FindMovies" xml:space="preserve">
+    <value>P - ИСКАТЬ фильмы</value>
+  </data>
+  <data name="Greeting" xml:space="preserve">
+    <value>Вас приветствует приложение MyMovies!</value>
+  </data>
+  <data name="Language" xml:space="preserve">
+    <value>язык</value>
+  </data>
+  <data name="Movie" xml:space="preserve">
+    <value>Фильм</value>
+  </data>
+  <data name="MovieAdded" xml:space="preserve">
+    <value>Фильм успешно добавлен в каталог.</value>
+  </data>
+  <data name="MovieChanged" xml:space="preserve">
+    <value>Фильм успешно изменён.</value>
+  </data>
+  <data name="MovieDate" xml:space="preserve">
+    <value>Дата</value>
+  </data>
+  <data name="MovieDirector" xml:space="preserve">
+    <value>Режиссёр</value>
+  </data>
+  <data name="MovieExist" xml:space="preserve">
+    <value>Такой фильм уже есть в каталоге.</value>
+  </data>
+  <data name="MovieGenres" xml:space="preserve">
+    <value>Жанр</value>
+  </data>
+  <data name="MovieName" xml:space="preserve">
+    <value>Название</value>
+  </data>
+  <data name="MovieNumber" xml:space="preserve">
+    <value>Номер</value>
+  </data>
+  <data name="MovieOriginalName" xml:space="preserve">
+    <value>Оригинальное название</value>
+  </data>
+  <data name="MovieRating" xml:space="preserve">
+    <value>Рейтинг</value>
+  </data>
+  <data name="MovieRemoved" xml:space="preserve">
+    <value>Фильм успешно удалён.</value>
+  </data>
+  <data name="MovieWatched" xml:space="preserve">
+    <value>Просмотрен</value>
+  </data>
+  <data name="MovieYear" xml:space="preserve">
+    <value>Год</value>
+  </data>
+  <data name="No" xml:space="preserve">
+    <value>нет</value>
+  </data>
+  <data name="NotFound" xml:space="preserve">
+    <value>Не найден(о).</value>
+  </data>
+  <data name="OpenCatalog" xml:space="preserve">
+    <value>O - ОТКРЫТЬ каталог</value>
+  </data>
+  <data name="OpenMovie" xml:space="preserve">
+    <value>O - ОТКРЫТЬ фильм</value>
+  </data>
+  <data name="PressAnyKey" xml:space="preserve">
+    <value>Нажмите любую клавишу для возврата к списку фильмов...</value>
+  </data>
+  <data name="RemoveCatalog" xml:space="preserve">
+    <value>D - УДАЛИТЬ каталог</value>
+  </data>
+  <data name="RemoveMovie" xml:space="preserve">
+    <value>D - УДАЛИТЬ фильм</value>
+  </data>
+  <data name="SaveChanges" xml:space="preserve">
+    <value>Сохранить? Введите 'да', чтобы сохранить изменения, 'нет' - продолжить редактирование</value>
+  </data>
+  <data name="SelectRandomCatalog" xml:space="preserve">
+    <value>R - ВЫБРАТЬ СЛУЧАЙНЫЙ каталог</value>
+  </data>
+  <data name="SelectRandomMovie" xml:space="preserve">
+    <value>R - ВЫБРАТЬ СЛУЧАЙНЫЙ фильм</value>
+  </data>
+  <data name="SortingByNameOrByDate" xml:space="preserve">
+    <value>1 - сортировать по имени, 2 - сортировать по дате</value>
+  </data>
+  <data name="SortingCatalogs" xml:space="preserve">
+    <value>S - СОРТИРОВАТЬ каталоги</value>
+  </data>
+  <data name="SortingMovies" xml:space="preserve">
+    <value>S - СОРТИРОВАТЬ фильмы</value>
+  </data>
+  <data name="UnknownCommand" xml:space="preserve">
+    <value>Неизвестная команда.</value>
+  </data>
+  <data name="Welcome" xml:space="preserve">
+    <value>Добро пожаловать</value>
+  </data>
+  <data name="WrongCommand" xml:space="preserve">
+    <value>Неверная команда.</value>
+  </data>
+  <data name="WrongFormat" xml:space="preserve">
+    <value>Неверный формат поля</value>
+  </data>
+  <data name="WrongPassword" xml:space="preserve">
+    <value>Неверный пароль. Введите ещё раз.</value>
+  </data>
+  <data name="Yes" xml:space="preserve">
+    <value>да</value>
+  </data>
+</root>

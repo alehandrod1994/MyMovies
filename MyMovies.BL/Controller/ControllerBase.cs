@@ -34,7 +34,7 @@ namespace MyMovies.BL.Controller
 			var formatter = new BinaryFormatter();
 			var fileName = $"{typeof(T).Name}s.bin";
 
-			using (var fs = new FileStream(fileName, FileMode.OpenOrCreate))
+			using (var fs = new FileStream(fileName, FileMode.Create))
 			{
 				formatter.Serialize(fs, item);
 			}
